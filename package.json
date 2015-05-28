@@ -1,0 +1,13 @@
+{
+  "name": "mailru",
+  "devDependencies": {
+    "almond": "0.3.1",
+    "request": "^2",
+    "grunt": "~0.4.0",
+    "grunt-contrib-requirejs": "~0.4.4"
+  },
+  "scripts": {
+    "api-server": "node app/server/api.js",
+    "fest-proxy": "../fest/bin/fest-proxy app/config/fest-proxy.json"
+  }
+}

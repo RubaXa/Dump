@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<fest:template xmlns:fest="http://fest.mail.ru" xmlns:bem="http://fest.mail.ru/bem">
+	<!-- layout -->
+	<div bem:block="layout">
+		<div class="layout__1">
+			<div data-view-id="folders"></div>
+		</div>
+
+		<div class="layout__2">
+			<div data-view-id="messages"></div>
+		</div>
+
+		<div class="layout__3">
+			<div data-view-id="message"></div>
+		</div>
+
+		<div class="clear"></div>
+	</div>
+
+	<fest:include src="btn/btn.xml"/>
+	<fest:include src="nav/nav.xml"/>
+	<fest:include src="caption/caption.xml"/>
+	<fest:include src="datalist/datalist.xml"/>
+	<fest:include src="letter/letter.xml"/>
+	<fest:include src="toolbar/toolbar.xml"/>
+
+</fest:template>

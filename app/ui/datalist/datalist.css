@@ -1,0 +1,106 @@
+.datalist {
+	font-family: 'PT Sans', sans-serif;
+	margin-left: -30px;
+}
+	.datalist__item {
+		display: block;
+		padding: 5px 0 5px 30px;
+		margin-bottom: 1px;
+		border-radius: 5px;
+		position: relative;
+		transition: background-color .2s;
+	}
+
+	.datalist__item_active {
+		background-color: #E9EDF0;
+	}
+
+	.datalist__item_selected {
+		background-color: #E0E6EA;
+	}
+
+	.datalist__item > * {
+		overflow: hidden;
+		display: inline-block;
+		vertical-align: middle;
+		white-space: nowrap;
+		text-decoration: none;
+	}
+
+	.datalist__unread {
+		cursor: pointer;
+		width: 10px;
+		height: 10px;
+		border: 2px solid #45BF7B;
+		border-radius: 100%;
+		position: absolute;
+		top: 14px;
+		left: 10px;
+		opacity: 0;
+		transition: opacity .2s;
+		-webkit-user-select: none;
+		user-select: none;
+	}
+
+	.datalist__item:hover .datalist__unread {
+		opacity: 0.4;
+	}
+
+	.datalist__item:hover .datalist__unread:hover {
+		opacity: 1;
+	}
+
+	.datalist__item:hover .datalist__unread_yes,
+	.datalist__unread_yes {
+		opacity: 1;
+		background: #45BF7B;
+	}
+
+	.datalist__ctrl {
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity .2s, color .2s;
+		margin-left: 10px;
+		font-size: 20px;
+	}
+		.datalist__ctrl:hover {
+			color: #D04F3A;
+		}
+
+	.datalist__item:hover .datalist__ctrl {
+		opacity: 1;
+	}
+
+
+	.datalist__ava {
+		width: 30px;
+		height: 30px;
+		border-radius: 100%;
+		margin-right: 10px;
+		background-size: cover;
+		-webkit-user-select: none;
+		user-select: none;
+	}
+		.datalist__ava .fa {
+			opacity: 0;
+			color: #000;
+			cursor: pointer;
+			font-size: 36px;
+			transform: translateY(-3px);
+			transition: opacity .2s;
+		}
+			.datalist__ava:hover .fa {
+				opacity: 0.5;
+			}
+
+	.datalist__user {
+		color: #323B3D;
+		width: 20%;
+	}
+
+	.datalist__subj {
+		color: #858C8E;
+		width: 50%;
+		margin-left: 5%;
+		text-overflow: ellipsis;
+	}

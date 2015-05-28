@@ -1,0 +1,38 @@
+.toolbar {
+	left: 22.35%;
+	width: 70%;
+	bottom: 0;
+	position: fixed;
+	padding: 10px 15px;
+	background-color: #fff;
+	border-radius: 5px 5px 0 0;
+	box-shadow: 0 0 5px rgba(0,0,0,.7);
+	overflow: hidden;
+	transition: all .2s;
+}
+	.layout_3 .toolbar {
+		left: 20%;
+		width: 30%;
+	}
+
+	.toolbar_hidden {
+		height: 0;
+		opacity: 0;
+		padding: 0;
+	}
+
+	.toolbar__item {
+		cursor: pointer;
+		transition: color .2s;
+		margin-right: 10px;
+		display: inline-block;
+	}
+	.toolbar__item:hover {
+		color: #D04F3A;
+	}
+
+	.toolbar__item i {
+		font-size: 18px;
+		margin-right: 5px;
+		vertical-align: middle;
+	}

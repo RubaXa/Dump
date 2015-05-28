@@ -1,0 +1,74 @@
+@import "nav/nav.css";
+@import "letter/letter.css";
+@import "caption/caption.css";
+@import "datalist/datalist.css";
+@import "toolbar/toolbar.css";
+
+.roboto {
+	font-family: 'Roboto', sans-serif;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+	font-family: 'PT Sans', sans-serif;
+}
+
+.clear {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+
+/**
+ * Layout
+ */
+.layout {
+	height: 100%;
+	position: relative;
+}
+	.layout__1 {
+		color: #637074;
+		position: fixed;
+		width: 18%;
+		padding-top: 110px;
+		background: #1B2224;
+		height: 100%;
+	}
+
+	.layout__2 {
+		float: left;
+		width: 74.60%;
+		margin-left: 24.35%;
+		transition: width .5s, margin-left .5s;
+	}
+
+	.layout__3 {
+		float: left;
+		width: 47%;
+		overflow: hidden;
+		margin-left: -20px;
+		padding-left: 30px;
+		background-color: #E9EDF0;
+	}
+
+	.layout_3 .layout__2 {
+		width: 30%;
+		margin-left: 22%;
+	}
+
+
+.fa {
+	vertical-align: middle;
+}

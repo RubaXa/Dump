@@ -1,0 +1,10 @@
+.letter {
+	font-family: 'PT Sans', sans-serif;
+}
+	.letter__info {
+		margin-top: -30px;
+	}
+
+	.letter__body {
+		margin-top: 20px;
+	}
