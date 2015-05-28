@@ -8,7 +8,7 @@ define([
 	/** Object */sitemap
 ) {
 	RPC.setup({
-		'baseUrl': 'http://127.0.0.1:9615/'
+		'baseUrl': /local\.git/.test(location) ? 'http://127.0.0.1:9615/' : 'https://dump-api-proxy.herokuapp.com/'
 	});
 
 	var app = Pilot.create(sitemap);
