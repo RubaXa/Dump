@@ -5,16 +5,6 @@ requirejs.config({
 		'jssdk'
 	],
 
-	shim: {
-		'app': {
-			deps: [
-				'mail/actions/MarkAs',
-				'mail/actions/MoveTo',
-				'mail/actions/Delete'
-			]
-		}
-	},
-
 	paths: (function (basePath) {
 		return {
 			//'ui/lego': 'http://local.git:8091/playground/mail/app/ui/lego'

@@ -1,15 +1,12 @@
 define([
-	'RPC',
 	'pilot',
-	'sitemap'
+	'sitemap',
+	'setup'
 ], function (
-	/** RPC */RPC,
 	/** Pilot */Pilot,
 	/** Object */sitemap
 ) {
-	RPC.setup({
-		'baseUrl': /local\.git/.test(location) ? 'http://127.0.0.1:5000/' : 'https://dump-api-proxy.herokuapp.com/'
-	});
+	'use strict';
 
 	var app = Pilot.create(sitemap);
 	var navChanged = function () {
@@ -23,5 +20,6 @@ define([
 	// Init
 	navChanged();
 
+	// Export
 	return (window.app = app);
 });
