@@ -1,0 +1,14 @@
+&btn = button {
+	on-click: ctx.onclick();
+
+	if ctx.icon {
+		// Тут мы используем ico, если передали
+		&ico { mods: ctx.icon }
+	}
+
+	// Определяем элемент text
+	span.&__text {
+		class: { &_pad: ctx.icon }
+		| {{ctx.text}
+	}
+}

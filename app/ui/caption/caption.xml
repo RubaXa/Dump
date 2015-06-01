@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<fest:template xmlns:fest="http://fest.mail.ru" xmlns:bem="http://fest.mail.ru/bem">
-
-	<div bem:block="caption">
-		<fest:value>ctx.text || ''</fest:value>&amp;nbsp;
-	</div>
-
-</fest:template>

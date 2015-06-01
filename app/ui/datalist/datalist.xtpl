@@ -1,0 +1,36 @@
+&datalist = div {
+	for item in ctx.items {
+		.__item {
+			class: {
+				active: item.active
+				selected: item.selected
+			}
+
+			.__unread {
+				class: {
+					yes: item.unread
+				}
+				on-click: ctx.onunread(item)
+			}
+
+			.__ava {
+				style: "background-image: url(" + item.avatar + ")";
+				on-click: ctx.onselect(item);
+
+				i.fa.fa-check-circle {}
+			}
+
+			a.__user {
+				href: "#!" + item.url
+				| {{item.email}}
+			}
+
+			a.__subj {
+				href: "#!" + item.subject
+				| {{item.email}}
+			}
+
+			i.datalist__ctrl.fa.fa-trash-o { on-click: ctx.ondelete(item) }
+		}
+	}
+}
