@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 					baseUrl: './app/',
 					mainConfigFile: ['app/boot.js'],
 					name: '../node_modules/almond/almond',
-					out: 'app/.min/app.min.js',
+					out: 'app/min/app.min.js',
 					deps: ['app'],
 					optimize: 'none'
 				})
