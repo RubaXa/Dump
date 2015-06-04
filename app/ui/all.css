@@ -1,9 +1,3 @@
-@import "nav/nav.css";
-@import "letter/letter.css";
-@import "caption/caption.css";
-@import "datalist/datalist.css";
-@import "toolbar/toolbar.css";
-
 .roboto {
 	font-family: 'Roboto', sans-serif;
 }

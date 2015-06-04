@@ -5,10 +5,10 @@ define(function (require) {
 	// Всякие ui-блоки (хелпер)
 	var ui = {
 		nav: require('ui/nav/nav'),
-		caption: require('ui/caption/caption'),
-		toolbar: require('ui/toolbar/toolbar'),
-		datalist: require('ui/datalist/datalist'),
-		letter: require('ui/letter/letter')
+		//caption: require('ui/caption/caption'),
+		//toolbar: require('ui/toolbar/toolbar'),
+		//datalist: require('ui/datalist/datalist'),
+		//letter: require('ui/letter/letter')
 	};
 
 

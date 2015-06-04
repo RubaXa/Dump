@@ -15,6 +15,13 @@ requirejs.config({
 		}
 	},
 
+	map: {
+		'*': {
+			css: 'node_modules/require-css/css.js',
+			xtpl: 'require-xtpl'
+		}
+	},
+
 	paths: (function (basePath) {
 		return {
 			//'ui/lego': 'http://local.git:8091/playground/mail/app/ui/lego'

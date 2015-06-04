@@ -1,1 +1,1 @@
-&caption = div | {{ctx.text || ''}}&nbsp;
+&caption = .caption | {{ctx.text || ''}}&nbsp;

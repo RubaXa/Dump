@@ -1,4 +1,7 @@
-define(['ui/block'], function (block) {
+define(['text!./nav', 'css!./nav'], function (template) {
+	'use strict';
+
+
 	var ICON_MAP = {
 		inbox: 'inbox',
 		spam: 'thumbs-o-down',
@@ -7,42 +10,76 @@ define(['ui/block'], function (block) {
 		def: 'folder-o'
 	};
 
-	return block.create('nav', {
-		init: function (data) {
-			data.models.on('change', function (evt, folder) {
-				var item = data.index[folder.id];
 
-				item.text = folder.get('name');
-				item.badge = folder.get('unread');
+	function listStream(models, spec) {
+		var _items = [];
+		var _index = {};
+		var _create = function (filter, items) {
+			var length = models.length;
+			var _stream = function (filter) {
+				return _create(filter, []);
+			};
 
-				data.$apply();
+			for (var i = 0; i < length; i++) {
+				var item = {};
+				var model = models[i];
+
+				if (filter(model)) {
+					spec.tick('add', item, model, _stream);
+
+					_index[model.id] = item;
+					items.push(item);
+				}
+			}
+
+			return items;
+		};
+
+		models.on('reset add remove', function () {
+			_index = {};
+			_items.splice(0, _items.length);
+		});
+
+		models.on('change', function (evt, model) {
+			spec.tick('change', _index[model.id], model);
+		});
+
+		return _create(spec.filter, _items);
+	}
+
+
+	// Export
+	return xtpl.element({
+		tpl: template,
+
+		props: {
+			active: -1,
+			expanded: {}
+		},
+
+		init: function () {
+			this.props.items = listStream(this.props.models, {
+				filter: function (folder) {
+					return folder.get('parent') == this.parent;
+				},
+
+				tick: function (type, data, folder, toStream) {
+					if (type === 'add') {
+						data.id = folder.id;
+						data.items = toStream(function (folder) {
+							return folder.get('parent') == data.id;
+						});
+					}
+
+					data.icon = ICON_MAP[folder.get('type')] || ICON_MAP.def;
+					data.text = folder.get('name');
+					data.badge = folder.get('unread');
+				}
 			});
 		},
 
-		transform: function (data) {
-			data.items = [];
-			data.index = {};
-
-			(function _next(items, parentId) {
-				data.models.forEach(function (folder) {
-					if (folder.get('parent') == parentId) {
-						var subitems = [];
-						var item = {
-							id: folder.id,
-							url: data.route.getUrl(folder),
-							icon: ICON_MAP[folder.get('type')] || ICON_MAP.def,
-							text: folder.get('name'),
-							badge: folder.get('unread'),
-							items: subitems
-						};
-
-						items.push(item);
-						data.index[folder.id] = item;
-
-						_next(subitems, folder.id);
-					}
-				});
-			})(data.items, -1);
+		onclick: function (item) {
+			this.active = item.id;
 		}
 	});
 });

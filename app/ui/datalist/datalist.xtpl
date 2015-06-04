@@ -1,36 +1,29 @@
-&datalist = div {
-	for item in ctx.items {
-		.__item {
+&datalist = .datalist {
+	for model in ctx.models {
+		.&__item {
 			class: {
-				active: item.active
-				selected: item.selected
+				&_active: ctx.active = model.id
+				&_selected: ctx.selected[model.id]
 			}
 
-			.__unread {
-				class: {
-					yes: item.unread
-				}
-				on-click: ctx.onunread(item)
+			.&__unread {
+				class: { &_yes: model.isUnread() }
+				on-click: ctx.onunread(model);
 			}
 
-			.__ava {
-				style: "background-image: url(" + item.avatar + ")";
-				on-click: ctx.onselect(item);
+			.&__ava {
+				style: "background-image: url(" + model.avatar + ")";
+				on-click: (ctx.selected[model.id] = true, ctx.onselect(model));
 
 				i.fa.fa-check-circle {}
 			}
 
-			a.__user {
-				href: "#!" + item.url
-				| {{item.email}}
+			a.&__user[href="'message' | route:model"] {
+				| {{ model->correspondents.from.0.name || model->correspondents.from.0.email }}
 			}
 
-			a.__subj {
-				href: "#!" + item.subject
-				| {{item.email}}
-			}
-
-			i.datalist__ctrl.fa.fa-trash-o { on-click: ctx.ondelete(item) }
+			a.&__subj[href="'message' | route:model"] | {{ model.subject }}
+			i.&__ctrl.fa.fa-trash-o { on-click: ctx.ondelete(model) }
 		}
 	}
 }
