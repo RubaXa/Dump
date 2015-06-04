@@ -49,6 +49,20 @@ define(function (require) {
 		mixins: [require('pilot/mixin/view')],
 		access: require('service/auth'),
 
+		url: {
+			pattern: '/:folder?',
+			params: {
+				folder: {
+					default: 0,
+					decode: function (value) {
+						var id = Folder[value.toUpperCase()];
+						return id === void 0 ? parseInt(value, 10) : id;
+					}
+				}
+			},
+			toUrl: _toUrl
+		},
+
 		'on:route': function () {
 			this.el.classList.toggle('layout_3', this.request.is('#message'));
 		},
@@ -84,20 +98,6 @@ define(function (require) {
 
 		// Список писем
 		'#messages': {
-			url: {
-				pattern: '/:folder?',
-				params: {
-					folder: {
-						default: 0,
-						decode: function (value) {
-							var id = Folder[value.toUpperCase()];
-							return id === void 0 ? parseInt(value, 10) : id;
-						}
-					}
-				},
-				toUrl: _toUrl
-			},
-
 			model: {
 				messages: function (req) {
 					var folderId = req.params.folder;
