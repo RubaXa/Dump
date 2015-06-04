@@ -1,0 +1,10 @@
+&toolbar = .toolbar {
+	class: { &_hidden: ctx.hidden }
+
+	for item in ctx.items {
+		.&__item {
+			on-click: item.onclick(item);
+			i.fa.fa-{{ item.icon }} + span | {{ item.text }}
+		}
+	}
+}

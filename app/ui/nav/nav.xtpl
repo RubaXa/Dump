@@ -1,0 +1,30 @@
+&nav = .nav > for item in ctx.props.items {
+	a.&__item[href="#!{{item.url}}"] {
+		class: { &_active: ctx.props.active == item.id }
+		on-click: ctx.onclick(item);
+
+		i.fa.fa-{{ item.icon }} + span | {{ item.text }}
+
+		if item.badge {
+			span.&__badge | {{ item.badge }}
+		}
+	}
+
+	// Подменю
+	.&__subitems {
+		class: { &_close: !ctx.props.expanded[item.id] }
+
+		for item in item.items {
+			a.&__item[href="#!{{item.url}}"] {
+				class: { &_active: ctx.props.active == item.id }
+				on-click: ctx.props.active = item.id;
+
+				i.fa.fa-{{ item.icon }} + span | {{ item.text }}
+
+				if item.badge {
+					span.&__badge | {{ item.badge }}
+				}
+			}
+		}
+	}
+}

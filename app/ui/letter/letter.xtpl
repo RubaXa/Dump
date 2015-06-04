@@ -1,0 +1,6 @@
+&letter = .letter {
+	&caption { x-text: ctx.model->subject }
+
+	.&__info | от {{ ctx.model->correspondents.from.0.name || ctx.model->correspondents.from.0.email }}
+	.&__body | {* ctx.model->body.html *}
+}
