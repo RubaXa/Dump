@@ -1,0 +1,12 @@
+.layout {
+	class: {
+		layout_3: ctx.request.is("#message")
+	}
+
+	.&__1 { x-route: "#:folders" }
+	.&__2 { x-route: "#messages" }
+
+	if ctx.request.is("#message") {
+		.&__3 { x-route: "#message" }
+	}
+}

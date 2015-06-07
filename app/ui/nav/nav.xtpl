@@ -1,7 +1,6 @@
-&nav = .nav > for item in ctx.props.items {
-	a.&__item[href="#!{{item.url}}"] {
+.nav > for item in ctx.props.items {
+	a.&__item[href="#!{{ctx.props.route | routeUrl:item}}"] {
 		class: { &_active: ctx.props.active == item.id }
-		on-click: ctx.onclick(item);
 
 		i.fa.fa-{{ item.icon }} + span | {{ item.text }}
 

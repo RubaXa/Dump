@@ -1,5 +1,7 @@
-define(['text!./nav', 'css!./nav'], function (template) {
+define(function (require) {
 	'use strict';
+
+	require('css!./nav');
 
 
 	var ICON_MAP = {
@@ -11,75 +13,37 @@ define(['text!./nav', 'css!./nav'], function (template) {
 	};
 
 
-	function listStream(models, spec) {
-		var _items = [];
-		var _index = {};
-		var _create = function (filter, items) {
-			var length = models.length;
-			var _stream = function (filter) {
-				return _create(filter, []);
-			};
-
-			for (var i = 0; i < length; i++) {
-				var item = {};
-				var model = models[i];
-
-				if (filter(model)) {
-					spec.tick('add', item, model, _stream);
-
-					_index[model.id] = item;
-					items.push(item);
-				}
-			}
-
-			return items;
-		};
-
-		models.on('reset add remove', function () {
-			_index = {};
-			_items.splice(0, _items.length);
-		});
-
-		models.on('change', function (evt, model) {
-			spec.tick('change', _index[model.id], model);
-		});
-
-		return _create(spec.filter, _items);
-	}
-
 
 	// Export
-	return xtpl.element({
-		tpl: template,
+	return require('ui/element')({
+		template: require('text!./nav.xtpl'),
 
 		props: {
+			items: [],
 			active: -1,
 			expanded: {}
 		},
 
 		init: function () {
-			this.props.items = listStream(this.props.models, {
+			this.props.items = this.listStream(this.props.models, {
 				filter: function (folder) {
-					return folder.get('parent') == this.parent;
+					return folder.get('parent') == -1;
 				},
 
-				tick: function (type, data, folder, toStream) {
+				tick: function (type, item, folder, toStream) {
 					if (type === 'add') {
-						data.id = folder.id;
-						data.items = toStream(function (folder) {
-							return folder.get('parent') == data.id;
+						item.id = folder.id;
+						item.folder = folder.id;
+						item.items = toStream(function (folder) {
+							return folder.get('parent') == item.id;
 						});
 					}
 
-					data.icon = ICON_MAP[folder.get('type')] || ICON_MAP.def;
-					data.text = folder.get('name');
-					data.badge = folder.get('unread');
+					item.icon = ICON_MAP[folder.get('type')] || ICON_MAP.def;
+					item.text = folder.get('name');
+					item.badge = folder.get('unread');
 				}
 			});
-		},
-
-		onclick: function (item) {
-			this.active = item.id;
 		}
 	});
 });

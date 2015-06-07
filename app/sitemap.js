@@ -5,10 +5,10 @@ define(function (require) {
 	// Всякие ui-блоки (хелпер)
 	var ui = {
 		nav: require('ui/nav/nav'),
-		//caption: require('ui/caption/caption'),
-		//toolbar: require('ui/toolbar/toolbar'),
-		//datalist: require('ui/datalist/datalist'),
-		//letter: require('ui/letter/letter')
+		caption: require('ui/caption/caption'),
+		toolbar: require('ui/toolbar/toolbar'),
+		datalist: require('ui/datalist/datalist'),
+		letter: require('ui/letter/letter')
 	};
 
 
@@ -25,6 +25,7 @@ define(function (require) {
 
 
 	var _toUrl = function (params, builder) {
+
 		if (params instanceof Folder) {
 			params = {folder: params.id};
 		}
@@ -34,7 +35,8 @@ define(function (require) {
 
 		var folder = Folder.get(params.folder);
 
-		if (folder.is('system')) {
+		if (folder && folder.is('system')) {
+			params = Object.create(params);
 			params.folder = folder.get('type');
 		}
 
@@ -45,13 +47,12 @@ define(function (require) {
 
 	// Структура приложеньки
 	return {
-		dom: require('ui/block').render('layout'),
-		mixins: [require('pilot/mixin/view')],
 		access: require('service/auth'),
+		mixins: [require('pilot/mixin/xtpl')],
 
-		'on:route': function () {
-			this.el.classList.toggle('layout_3', this.request.is('#message'));
-		},
+		el: '#app',
+		template: require('text!ui/layout/layout.xtpl'),
+
 
 		// Глобальные модели
 		model: {
@@ -71,16 +72,15 @@ define(function (require) {
 		// Регионы
 		'*': {
 			'folders': {
-				mixins: [require('pilot/mixin/fest')],
+				mixins: [require('pilot/mixin/xtpl')],
 				components: {
-					nav: ui.nav({models: Folder.all})
+					nav: ui.nav({route: '#messages', models: Folder.all})
 				},
 				'on:route': function () {
-					this.nav.active = this.model.folder.id;
+					this.nav.props.active = this.model.folder.id;
 				}
 			}
 		},
-
 
 		// Список писем
 		'#messages': {
@@ -108,10 +108,13 @@ define(function (require) {
 					}.bind(this));
 				}
 			},
-			mixins: [require('pilot/mixin/fest')],
+
+			mixins: [require('pilot/mixin/xtpl')],
+
 			components: {
 				caption: ui.caption({}),
 				datalist: ui.datalist({
+					selected: {},
 					onselect: selection.onSelect,
 					onunread: action.toggleUnread,
 					ondelete: action.delete
@@ -129,21 +132,24 @@ define(function (require) {
 					}]
 				})
 			},
+
 			init: function () {
 				action.setSource(selection);
 				selection.setSource(this.datalist);
 
 				selection.on('change', function (evt) {
-					this.toolbar.$set('hidden', !evt.selected);
+					this.toolbar.props.hidden = !evt.selected;
 				}.bind(this));
 
 				action.on('execution', function () {
 					selection.clear();
 				});
 			},
+
 			'on:route': function () {
-				this.caption.$set('text', this.model.folder.get('name'));
-				this.datalist.setModels(this.model.messages);
+				this.caption.props.text = this.model.folder.get('name');
+				this.datalist.props.models = this.model.messages;
+				this.datalist.props.active = this.router.request.params.message;
 			},
 
 
@@ -151,21 +157,17 @@ define(function (require) {
 				// да ничего не нужно
 			},
 
+
 			'#message': {
 				url: '/:folder/:message',
 				model: {
-					message: function (req, waitFor) {
+					message: function (req) {
 						return Message.findOne(req.params.message);
 					}
 				},
-				mixins: [require('pilot/mixin/fest')],
+				mixins: [require('pilot/mixin/xtpl')],
 				components: {
-					letter: ui.letter({
-						model: new Message,
-						html: function () {
-							return (this.model.get('body.html') || '').replace(/<base.*?>/g, '');
-						}
-					})
+					letter: ui.letter({})
 				},
 				'on:route': function () {
 					this.letter.model = this.model.message;

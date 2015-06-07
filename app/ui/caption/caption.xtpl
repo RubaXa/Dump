@@ -1,1 +1,1 @@
-&caption = .caption | {{ctx.text || ''}}&nbsp;
+.caption | {{ctx.props.text || ''}}&nbsp;

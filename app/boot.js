@@ -18,7 +18,7 @@ requirejs.config({
 	map: {
 		'*': {
 			css: 'node_modules/require-css/css.js',
-			xtpl: 'require-xtpl'
+			text: 'node_modules/requirejs-text/text.js'
 		}
 	},
 
@@ -29,6 +29,7 @@ requirejs.config({
 			// Поставщики
 			'jssdk': basePath + '/JSSDK/boot',
 			'Ply': basePath + '/Ply/Ply',
+			'xtpl': basePath + '/xtpl/dist/xtpl',
 			'fest': basePath + '/fest/examples/fest.binding',
 			'pilot': basePath + '/Pilot/src/pilot',
 			'Pilot/src': basePath + '/Pilot/src/',

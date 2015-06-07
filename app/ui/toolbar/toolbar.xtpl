@@ -1,7 +1,7 @@
-&toolbar = .toolbar {
-	class: { &_hidden: ctx.hidden }
+.toolbar {
+	class: { &_hidden: ctx.props.hidden }
 
-	for item in ctx.items {
+	for item in ctx.props.items {
 		.&__item {
 			on-click: item.onclick(item);
 			i.fa.fa-{{ item.icon }} + span | {{ item.text }}

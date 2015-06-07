@@ -1,6 +1,7 @@
-&letter = .letter {
-	&caption { x-text: ctx.model->subject }
+.letter {
+	.caption | {{ctx.model.get('subject')}}
 
-	.&__info | от {{ ctx.model->correspondents.from.0.name || ctx.model->correspondents.from.0.email }}
-	.&__body | {* ctx.model->body.html *}
+	.&__info | от {{ ctx.model.get('correspondents.from.0.name') || ctx.model.get('correspondents.from.0.email') }}
+	.&__body | {* ctx.model.get('body.html').replace(/<base.*?>/g, '') *}
 }
+

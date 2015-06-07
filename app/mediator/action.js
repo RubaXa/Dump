@@ -23,22 +23,22 @@ define(['Emitter', 'Action', 'mail/Folder'], function (Emitter, Action, Folder) 
 		},
 
 		_markAs: function (models, flag, state) {
-			_this._execute('mail.MarkAs', {models: models, flag: flag, state: state});
+			return _this._execute('mail.MarkAs', {models: models, flag: flag, state: state});
 		},
 
 		toggleUnread: function (item) {
 			var model = _this.getModel(item.id);
-			_this._markAs([model], 'unread', !model.is('flags.unread'));
+			return _this._markAs([model], 'unread', !model.is('flags.unread'));
 		},
 
 		markAsReadedSelected: function () {
-			_this._markAs(_this.getSelected(), 'unread', false);
+			return _this._markAs(_this.getSelected(), 'unread', false);
 		},
 
 		_delete: function (models) {
 			var _list = _this.getModels();
 
-			_this._execute('mail.MoveTo', {models: models, folderTo: Folder.TRASH}).then(function () {
+			return _this._execute('mail.MoveTo', {models: models, folderTo: Folder.TRASH}).then(function () {
 				models.forEach(function (model) {
 					_list.remove(model);
 				});
@@ -46,11 +46,11 @@ define(['Emitter', 'Action', 'mail/Folder'], function (Emitter, Action, Folder) 
 		},
 
 		'delete': function (item) {
-			_this._delete([_this.getModel(item.id)]);
+			return _this._delete([_this.getModel(item.id)]);
 		},
 
 		deleteSelected: function () {
-			_this._delete(_this.getSelected());
+			return _this._delete(_this.getSelected());
 		}
 	};
 
