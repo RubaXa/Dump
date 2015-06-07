@@ -16,15 +16,22 @@ requirejs.config({
 	},
 
 	map: {
-		'*': {
-			css: 'node_modules/require-css/css.js',
-			text: 'node_modules/requirejs-text/text.js'
-		}
+		'*': (function (basePath) {
+			return {
+				css: basePath + 'node_modules/require-css/css.js',
+				text: basePath + 'node_modules/requirejs-text/text.js'
+			}
+		})(typeof window === 'undefined' ? '' : '')
 	},
 
 	paths: (function (basePath) {
 		return {
 			//'ui/lego': 'http://local.git:8091/playground/mail/app/ui/lego'
+			'app': './app/app',
+			'sitemap': './app/sitemap',
+			'ui': './app/ui/',
+			'mediator': './app/mediator/',
+			'service': './app/service/',
 
 			// Поставщики
 			'jssdk': basePath + '/JSSDK/boot',
@@ -35,5 +42,5 @@ requirejs.config({
 			'Pilot/src': basePath + '/Pilot/src/',
 			'pilot/mixin': basePath + '/Pilot/mixin/'
 		};
-	})(typeof window === 'undefined' ? '../../' : '')
+	})(typeof window === 'undefined' ? '../' : '')
 });

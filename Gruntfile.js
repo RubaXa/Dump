@@ -7,10 +7,10 @@ module.exports = function (grunt) {
 		requirejs: {
 			compile: {
 				options: require('../JSSDK/boot').extend({
-					baseUrl: './app/',
+					baseUrl: './',
 					mainConfigFile: ['app/boot.js'],
-					name: '../node_modules/almond/almond',
-					out: 'app/.min/app.min.js',
+					name: 'node_modules/almond/almond',
+					out: 'app/min/app.min.js',
 					deps: ['app'],
 					optimize: 'none'
 				})
