@@ -1,65 +1,71 @@
 define([
-	'xtpl',
+	'react',
+	'sandbox',
 	'utils/util'
 ], function (
-	/** xtpl */xtpl,
+	/** React */React,
+	/** sandbox */sandbox,
 	/** util */util
 ) {
 	'use strict';
 
+	var factory = function (name, decl) {
+		var componentDidMount = decl.componentDidMount;
 
-	var listStream = function (models, spec) {
-		var _this = this;
-		var _items = [];
-		var _index = {};
-		var _create = function (filter, items) {
-			var length = models.length;
-			var _stream = function (filter) {
-				return _create(filter, []);
-			};
 
-			for (var i = 0; i < length; i++) {
-				var item = {};
-				var model = models[i];
+		decl.displayName = name;
 
-				if (filter(model)) {
-					spec.tick('add', item, model, _stream);
+		decl.componentDidMount = function () {
+			var _this = this,
+				props = _this.props,
+				events = _this.events;
 
-					_index[model.id] = item;
-					items.push(item);
-				}
+			Object.keys(events).forEach(function (name) {
+				var fn = events[name];
+
+				fn.handle = fn.handle || function () {
+					return fn.apply(_this, arguments);
+				};
+
+				sandbox.on(name, fn.handle);
+			});
+
+			if (props.models) {
+				props.models.on('update', util.bindWithoutArgs(this.forceUpdate, [], this));
 			}
 
-			return items;
+			if (componentDidMount) {
+				componentDidMount.call(_this);
+			}
 		};
 
-		models.on('reset add remove', function () {
-			_index = {};
-			_items.splice(0, _items.length);
-			_create(spec.filter, models);
-		});
+		decl.componentDidUnmount = function () {
+			var _this = this,
+				events = _this.events;
 
-		models.on('change', function (evt, model) {
-			spec.tick('change', _index[model.id], model);
-			_this.$apply();
-		});
+			Object.keys(events).forEach(function (name) {
+				sandbox.off(name, events[name].handle);
+			});
+		};
 
-		return _create(spec.filter, _items);
+		var Element = React.createClass(decl);
+
+		// «Инстанцирование»
+		return function (props) {
+			return function (route, key) {
+				props.key = key;
+				props.route = route;
+
+				return React.createElement(Element, props);
+			};
+		};
 	};
+
+
+	factory.DOM = React.DOM;
+	factory.sandbox = sandbox;
 
 
 	// Export
-	return function (decl) {
-		// «Инстанцирование»
-		return function (props) {
-			return util.extend({
-				init: function () {}
-			}, decl, {
-				props: util.extend({}, decl.props, props),
-				listStream: function () {
-					return listStream.apply(this, arguments);
-				}
-			});
-		};
-	};
+	return factory;
 });

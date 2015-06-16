@@ -4,6 +4,7 @@ define(function (require) {
 
 	// Всякие ui-блоки (хелпер)
 	var ui = {
+		layout: require('ui/layout/layout'),
 		nav: require('ui/nav/nav'),
 		caption: require('ui/caption/caption'),
 		toolbar: require('ui/toolbar/toolbar'),
@@ -13,6 +14,9 @@ define(function (require) {
 
 
 	{
+		// Песочница
+		var sandbox = require('sandbox');
+
 		// Модельки
 		var Action = require('Action');
 		var Folder = require('mail/Folder');
@@ -48,10 +52,12 @@ define(function (require) {
 	// Структура приложеньки
 	return {
 		access: require('service/auth'),
-		mixins: [require('pilot/mixin/xtpl')],
+		mixins: [require('pilot/mixin/react')],
 
 		el: '#app',
-		template: require('text!ui/layout/layout.xtpl'),
+		components: {
+			layout: ui.layout({})
+		},
 
 
 		// Глобальные модели
@@ -72,12 +78,12 @@ define(function (require) {
 		// Регионы
 		'*': {
 			'folders': {
-				mixins: [require('pilot/mixin/xtpl')],
+				mixins: [require('pilot/mixin/react')],
 				components: {
-					nav: ui.nav({route: '#messages', models: Folder.all})
+					nav: ui.nav({models: Folder.all})
 				},
 				'on:route': function () {
-					this.nav.props.active = this.model.folder.id;
+					sandbox.emit('folders:active', this.model.folder);
 				}
 			}
 		},
@@ -109,7 +115,7 @@ define(function (require) {
 				}
 			},
 
-			mixins: [require('pilot/mixin/xtpl')],
+			mixins: [require('pilot/mixin/react')],
 
 			components: {
 				caption: ui.caption({}),
@@ -119,21 +125,21 @@ define(function (require) {
 					onunread: action.toggleUnread,
 					ondelete: action.delete
 				}),
-				toolbar: ui.toolbar({
-					hidden: true,
-					items: [{
-						icon: 'check',
-						text: 'Прочитать',
-						onclick: action.markAsReadedSelected
-					}, {
-						icon: 'trash-o',
-						text: 'Удалить',
-						onclick: action.deleteSelected
-					}]
-				})
+				//toolbar: ui.toolbar({
+				//	hidden: true,
+				//	items: [{
+				//		icon: 'check',
+				//		text: 'Прочитать',
+				//		onclick: action.markAsReadedSelected
+				//	}, {
+				//		icon: 'trash-o',
+				//		text: 'Удалить',
+				//		onclick: action.deleteSelected
+				//	}]
+				//})
 			},
 
-			init: function () {
+			_init: function () {
 				action.setSource(selection);
 				selection.setSource(this.datalist);
 
@@ -147,9 +153,9 @@ define(function (require) {
 			},
 
 			'on:route': function () {
-				this.caption.props.text = this.model.folder.get('name');
-				this.datalist.props.models = this.model.messages;
-				this.datalist.props.active = this.router.request.params.message;
+				sandbox.emit('letters', this.model.messages);
+				//this.datalist.props.models = this.model.messages;
+				//this.datalist.props.active = this.router.request.params.message;
 			},
 
 

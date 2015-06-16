@@ -1,5 +1,5 @@
 requirejs.config({
-	baseUrl: './app/',
+	baseUrl: './',
 
 	deps: [
 		'jssdk'
@@ -12,6 +12,9 @@ requirejs.config({
 				'mail/actions/MoveTo',
 				'mail/actions/Delete'
 			]
+		},
+
+		'react': {
 		}
 	},
 
@@ -29,11 +32,13 @@ requirejs.config({
 			//'ui/lego': 'http://local.git:8091/playground/mail/app/ui/lego'
 			'app': './app/app',
 			'sitemap': './app/sitemap',
+			'sandbox': './app/sandbox',
 			'ui': './app/ui/',
 			'mediator': './app/mediator/',
 			'service': './app/service/',
 
 			// Поставщики
+			'react': 'https://fb.me/react-with-addons-0.13.3',
 			'jssdk': basePath + '/JSSDK/boot',
 			'Ply': basePath + '/Ply/Ply',
 			'xtpl': basePath + '/xtpl/dist/xtpl',

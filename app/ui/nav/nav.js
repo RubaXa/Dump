@@ -4,6 +4,10 @@ define(function (require) {
 	require('css!./nav');
 
 
+	var element = require('ui/element'),
+		DOM = element.DOM;
+
+
 	var ICON_MAP = {
 		inbox: 'inbox',
 		spam: 'thumbs-o-down',
@@ -15,35 +19,44 @@ define(function (require) {
 
 
 	// Export
-	return require('ui/element')({
-		template: require('text!./nav.xtpl'),
-
-		props: {
-			items: [],
-			active: -1,
-			expanded: {}
+	return element('nav', {
+		events: {
+			'folders:active': function (folder) {
+				this.setState({active: folder.id});
+			}
 		},
 
-		init: function () {
-			this.props.items = this.listStream(this.props.models, {
-				filter: function (folder) {
-					return folder.get('parent') == -1;
-				},
+		getInitialState: function () {
+			return {
+				active: -1
+			};
+		},
 
-				tick: function (type, item, folder, toStream) {
-					if (type === 'add') {
-						item.id = folder.id;
-						item.folder = folder.id;
-						item.items = toStream(function (folder) {
-							return folder.get('parent') == item.id;
-						});
+		render: function () {
+			var items = [];
+			var state = this.state;
+			var props = this.props;
+
+			props.models.forEach(function (folder) {
+				if (folder.get('parent') == -1) {
+					var content = [
+						DOM.i({key: 'icon', className: 'fa fa-' + (ICON_MAP[folder.get('type')] || ICON_MAP.def)}),
+						DOM.span({key: 'name'}, folder.get('name'))
+					];
+
+					if (folder.get('unread')) {
+						content.push(DOM.span({key: 'badge', className: 'nav__badge'}, folder.get('unread')))
 					}
 
-					item.icon = ICON_MAP[folder.get('type')] || ICON_MAP.def;
-					item.text = folder.get('name');
-					item.badge = folder.get('unread');
+					items.push(DOM.a({
+						key: folder.id,
+						href: '#!/' + folder.id + '/',
+						className: 'nav__item ' + (folder.id == state.active ? 'nav__item_active' : '')
+					}, content));
 				}
 			});
+
+			return DOM.div({className: 'nav'}, items);
 		}
 	});
 });

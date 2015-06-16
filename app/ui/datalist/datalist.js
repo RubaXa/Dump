@@ -1,52 +1,79 @@
 define(function (require) {
 	require('css!./datalist');
 
-	// Export
-	return require('ui/element')({
-		template: require('text!./datalist.xtpl'),
+	var element = require('ui/element'),
+		DOM = element.DOM;
 
-		props: {
-			models: null
+
+	// Export
+	return element('datalist', {
+		events: {
+			'letters': function (letters) {
+				this.setState({models: letters});
+			}
+		},
+
+		getInitialState: function () {
+			return {
+				active: -1,
+				models: [],
+				selected: {}
+			};
+		},
+
+		render: function () {
+			console.time('render');
+
+			var state = this.state;
+			var items = state.models.map(function (model) {
+				var content = [];
+
+				content.push(
+					// Unread
+					DOM.div({
+						key: 'unread',
+						className: 'datalist__unread' + (model.is('flags.unread') ? ' datalist__unread_yes' : '')
+					}),
+
+					// Аватарка
+					DOM.div({
+						key: 'ava',
+						className: 'datalist__ava',
+						style: {
+							backgroundImage: 'url("' + model.get('correspondents.from.0.avatars.default') + '")'
+						}
+					},
+						// Иконка
+						DOM.i({key: 'check', className: 'fa fa-check-circle'})
+					),
+
+					// User
+					DOM.a({
+						key: 'user',
+						href: '#!',
+						className: 'datalist__user'
+					}, model.get('correspondents.from.0.name') || model.get('correspondents.from.0.email')),
+
+					// Subject
+					DOM.a({key: 'subj', className: 'datalist__subj'}, model.get('subject')),
+
+					// Trash
+					DOM.i({key: 'trash', className: 'datalist__ctrl fa fa-trash-o'})
+				);
+
+				return DOM.div({
+					key: model.id,
+					className: 'datalist__item' +
+						(state.active === model.id ? ' datalist__item_active' : '') +
+						(state.selected[model.id] ? ' datalist__item_selected' : '')
+				}, content);
+			});
+
+			var datalist = DOM.div({className: 'datalist'}, items);
+
+			console.timeEnd('render');
+
+			return datalist;
 		}
 	});
 });
-//
-//
-//define(['ui/block', 'mail/Message'], function (block, Message) {
-//	return block.create('datalist', {
-//		init: function (data) {
-//			Message.all.on('change', function (evt, message) {
-//				var item = data.index[message.id];
-//
-//				if (item) {
-//					item.unread = message.get('flags.unread');
-//					item.flagged = message.get('flags.flagged');
-//				}
-//			});
-//		},
-//
-//		transform: function (data) {
-//			var items = data.items = [],
-//				isMessages = data.route.router.request.is('#message');
-//
-//			data.index = {};
-//
-//			data.models && data.models.forEach(function (message) {
-//				var item = {
-//					id: message.id,
-//					active: isMessages && data.route.router['#message'].params.message == message.id,
-//					url: data.route.router.getUrl('#message', message),
-//					email: message.get('correspondents.from.0.name') || message.get('correspondents.from.0.email'),
-//					avatar: message.get('correspondents.from.0.avatars.default'),
-//					unread: message.is('flags.unread'),
-//					flagged: message.is('flags.flagged'),
-//					subject: message.get('subject'),
-//					snippet: message.get('snippet')
-//				};
-//
-//				items.push(item);
-//				data.index[message.id] = item;
-//			});
-//		}
-//	});
-//});
