@@ -35,7 +35,7 @@ define(function (require) {
 						className: 'datalist__unread' + (model.is('flags.unread') ? ' datalist__unread_yes' : '')
 					}),
 
-					// Аватарка
+					// Рожа
 					DOM.div({
 						key: 'ava',
 						className: 'datalist__ava',
@@ -43,21 +43,21 @@ define(function (require) {
 							backgroundImage: 'url("' + model.get('correspondents.from.0.avatars.default') + '")'
 						}
 					},
-						// Иконка
+						// Чекед
 						DOM.i({key: 'check', className: 'fa fa-check-circle'})
 					),
 
-					// User
+					// От кого
 					DOM.a({
 						key: 'user',
 						href: '#!',
 						className: 'datalist__user'
 					}, model.get('correspondents.from.0.name') || model.get('correspondents.from.0.email')),
 
-					// Subject
+					// Тема
 					DOM.a({key: 'subj', className: 'datalist__subj'}, model.get('subject')),
 
-					// Trash
+					// Удалить
 					DOM.i({key: 'trash', className: 'datalist__ctrl fa fa-trash-o'})
 				);
 

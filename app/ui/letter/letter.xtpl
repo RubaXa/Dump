@@ -1,7 +1,0 @@
-.letter {
-	.caption | {{ctx.model.get('subject')}}
-
-	.&__info | от {{ ctx.model.get('correspondents.from.0.name') || ctx.model.get('correspondents.from.0.email') }}
-	.&__body | {* ctx.model.get('body.html').replace(/<base.*?>/g, '') *}
-}
-
