@@ -1,5 +1,5 @@
 requirejs.config({
-	baseUrl: './app/',
+	baseUrl: './',
 
 	deps: [
 		'jssdk'
