@@ -1,54 +1,31 @@
 define([
-	'react',
+	'mithril',
 	'sandbox',
 	'utils/util'
 ], function (
-	/** React */React,
+	/** Mithril */m,
 	/** sandbox */sandbox,
 	/** util */util
 ) {
 	'use strict';
 
 	var factory = function (name, decl) {
-		var componentDidMount = decl.componentDidMount;
-
-
-		decl.displayName = name;
-
-		decl.componentDidMount = function () {
-			var _this = this,
-				props = _this.props,
-				events = _this.events;
-
-			Object.keys(events).forEach(function (name) {
-				var fn = events[name];
-
-				fn.handle = fn.handle || function () {
-					return fn.apply(_this, arguments);
-				};
-
-				sandbox.on(name, fn.handle);
-			});
-
-			if (props.models) {
-				props.models.on('update', util.bindWithoutArgs(this.forceUpdate, [], this));
-			}
-
-			if (componentDidMount) {
-				componentDidMount.call(_this);
-			}
+		var Element = function (props) {
+			this.props = props || {};
 		};
 
-		decl.componentDidUnmount = function () {
-			var _this = this,
-				events = _this.events;
+		Element.prototype = Object.create(decl);
+		Element.prototype.displayName = name;
 
-			Object.keys(events).forEach(function (name) {
-				sandbox.off(name, events[name].handle);
-			});
+		Element.prototype.set = function (props) {
+			util.extend(this.props, props);
+			sandbox.emit('__changes__');
 		};
 
-		var Element = React.createClass(decl);
+		Element.prototype.render = function () {
+			return decl.render.call(this, m);
+		};
+
 
 		// «Инстанцирование»
 		return function (props) {
@@ -56,13 +33,12 @@ define([
 				props.key = key;
 				props.route = route;
 
-				return React.createElement(Element, props);
+				return new Element(props);
 			};
 		};
 	};
 
 
-	factory.DOM = React.DOM;
 	factory.sandbox = sandbox;
 
 

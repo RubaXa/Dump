@@ -7,9 +7,9 @@ define(function (require) {
 		layout: require('ui/layout/layout'),
 		nav: require('ui/nav/nav'),
 		caption: require('ui/caption/caption'),
-		toolbar: require('ui/toolbar/toolbar'),
 		datalist: require('ui/datalist/datalist'),
-		letter: require('ui/letter/letter')
+		//toolbar: require('ui/toolbar/toolbar'),
+		//letter: require('ui/letter/letter')
 	};
 
 
@@ -52,7 +52,7 @@ define(function (require) {
 	// Структура приложеньки
 	return {
 		access: require('service/auth'),
-		mixins: [require('pilot/mixin/react')],
+		mixins: [require('pilot/mixin/mithril')],
 
 		el: '#app',
 		components: {
@@ -78,12 +78,12 @@ define(function (require) {
 		// Регионы
 		'*': {
 			'folders': {
-				mixins: [require('pilot/mixin/react')],
+				mixins: [require('pilot/mixin/mithril')],
 				components: {
 					nav: ui.nav({models: Folder.all})
 				},
 				'on:route': function () {
-					sandbox.emit('folders:active', this.model.folder);
+					this.nav.props.active = this.model.folder.id;
 				}
 			}
 		},
@@ -115,7 +115,7 @@ define(function (require) {
 				}
 			},
 
-			mixins: [require('pilot/mixin/react')],
+			mixins: [require('pilot/mixin/mithril')],
 
 			components: {
 				caption: ui.caption({}),
@@ -140,21 +140,21 @@ define(function (require) {
 			},
 
 			_init: function () {
-				action.setSource(selection);
-				selection.setSource(this.datalist);
-
-				selection.on('change', function (evt) {
-					this.toolbar.props.hidden = !evt.selected;
-				}.bind(this));
-
-				action.on('execution', function () {
-					selection.clear();
-				});
+				//action.setSource(selection);
+				//selection.setSource(this.datalist);
+				//
+				//selection.on('change', function (evt) {
+				//	this.toolbar.props.hidden = !evt.selected;
+				//}.bind(this));
+				//
+				//action.on('execution', function () {
+				//	selection.clear();
+				//});
 			},
 
 			'on:route': function () {
-				sandbox.emit('letters', this.model.messages);
-				//this.datalist.props.models = this.model.messages;
+				this.caption.props.text = this.model.folder.get('name');
+				this.datalist.props.models = this.model.messages;
 				//this.datalist.props.active = this.router.request.params.message;
 			},
 
@@ -173,7 +173,7 @@ define(function (require) {
 				},
 				mixins: [require('pilot/mixin/xtpl')],
 				components: {
-					letter: ui.letter({})
+					//letter: ui.letter({})
 				},
 				'on:route': function () {
 					this.letter.model = this.model.message;
