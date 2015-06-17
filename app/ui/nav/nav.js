@@ -16,6 +16,10 @@ define(function (require) {
 
 	// Export
 	return require('ui/element')('nav', {
+		mount: function () {
+			require('mail/Folder').all.on('update', this.update.bind(this));
+		},
+
 		render: function (m) {
 			var items = [];
 			var props = this.props;
@@ -28,7 +32,7 @@ define(function (require) {
 					];
 
 					if (folder.get('unread')) {
-						content.push(m('.nav__badge', {key: 'badge'}, folder.get('unread')));
+						content.push(m('.nav__badge', {key: 'badge'}, folder.get('unread') + ''));
 					}
 
 					items.push(m(

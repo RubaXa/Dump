@@ -14,7 +14,8 @@ requirejs.config({
 			]
 		},
 
-		'react': {
+		'cito': {
+			exports: 'cito'
 		}
 	},
 
@@ -38,6 +39,7 @@ requirejs.config({
 			'service': './app/service/',
 
 			// Поставщики
+			'cito': 'http://rawgit.com/joelrich/citojs/master/dist/cito.min',
 			'react': 'https://fb.me/react-with-addons-0.13.3',
 			'mithril': 'http://mithril.js.org/mithril.min',
 			'jssdk': basePath + '/JSSDK/boot',

@@ -3,6 +3,10 @@ define(function (require) {
 
 	// Export
 	return require('ui/element')('datalist', {
+		mount: function () {
+			require('mail/Message').all.on('update', this.update.bind(this));
+		},
+
 		render: function (m) {
 			var props = this.props;
 			var items = props.models.map(function (model) {
@@ -16,7 +20,7 @@ define(function (require) {
 					m('.datalist__ava', {
 						key: 'ava',
 						style: {
-							backgroundImage: 'url("' + model.get('correspondents.from.0.avatars.default') + '")'
+							'background-image': 'url("' + model.get('correspondents.from.0.avatars.default') + '")'
 						}
 					},
 						// Чекед
@@ -41,7 +45,7 @@ define(function (require) {
 						(props.selected[model.id] ? '.datalist__item_selected' : ''), {key: model.id}, content);
 			});
 
-			return m('.datalist', items);
+			return m('.datalist', {}, items);
 		}
 	});
 });

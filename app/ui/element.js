@@ -1,29 +1,68 @@
 define([
-	'mithril',
-	'sandbox',
+	'uuid',
+	'cito',
 	'utils/util'
 ], function (
-	/** Mithril */m,
-	/** sandbox */sandbox,
+	/** function */uuid,
+	/** cito */cito,
 	/** util */util
 ) {
 	'use strict';
 
+	var rdot = /\./g;
+
+	var createElement = function (selector, attrs, children) {
+		var tag = 'div',
+			idx = selector.indexOf('.');
+
+		if (idx !== -1) {
+			if (idx !== 0) {
+				tag = selector.substr(0, idx);
+			}
+
+			attrs['class'] = selector.substr(idx + 1).replace(rdot, ' ');
+		}
+		else {
+			tag = selector;
+		}
+
+		return {
+			tag: tag,
+			key: attrs.key,
+			attrs: attrs,
+			children: children
+		};
+	};
+
+
 	var factory = function (name, decl) {
 		var Element = function (props) {
+			this.uid = uuid();
 			this.props = props || {};
 		};
 
 		Element.prototype = Object.create(decl);
 		Element.prototype.displayName = name;
 
-		Element.prototype.set = function (props) {
-			util.extend(this.props, props);
-			sandbox.emit('__changes__');
+		Element.prototype.update = function () {
+			var time = performance.now();
+
+			cito.vdom.update(this._vdom, this.render());
+			console.info(name + '.update: ' + (performance.now() - time).toFixed(3) + 'ms');
 		};
 
 		Element.prototype.render = function () {
-			return decl.render.call(this, m);
+			var fragment = decl.render.call(this, createElement);
+
+			fragment.key = this.uid;
+			fragment.events = {
+				$created: function (evt) {
+					this._vdom = evt.virtualNode;
+					this.mount && this.mount();
+				}.bind(this)
+			};
+
+			return fragment;
 		};
 
 
@@ -37,9 +76,6 @@ define([
 			};
 		};
 	};
-
-
-	factory.sandbox = sandbox;
 
 
 	// Export

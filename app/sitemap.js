@@ -52,7 +52,7 @@ define(function (require) {
 	// Структура приложеньки
 	return {
 		access: require('service/auth'),
-		mixins: [require('pilot/mixin/mithril')],
+		mixins: [require('pilot/mixin/cito')],
 
 		el: '#app',
 		components: {
@@ -78,7 +78,7 @@ define(function (require) {
 		// Регионы
 		'*': {
 			'folders': {
-				mixins: [require('pilot/mixin/mithril')],
+				mixins: [require('pilot/mixin/cito')],
 				components: {
 					nav: ui.nav({models: Folder.all})
 				},
@@ -115,7 +115,7 @@ define(function (require) {
 				}
 			},
 
-			mixins: [require('pilot/mixin/mithril')],
+			mixins: [require('pilot/mixin/cito')],
 
 			components: {
 				caption: ui.caption({}),
