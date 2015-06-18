@@ -28,6 +28,10 @@ define([
 		Perf.printInclusive();
 	});
 
+	app.one('route-end', function () {
+		Logo.parentNode.removeChild(Logo);
+	});
+
 	window.addEventListener('hashchange', function () {
 		navChanged();
 	});
