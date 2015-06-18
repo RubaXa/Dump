@@ -13,6 +13,16 @@ define([
 		app.nav(location.hash.split('!').pop() || '/');
 	};
 
+	app.on('before-route', function () {
+	});
+
+	app.on('route-end', function () {
+	});
+
+	app.one('route-end', function () {
+		Logo.parentNode.removeChild(Logo);
+	});
+
 	window.addEventListener('hashchange', function () {
 		navChanged();
 	});
